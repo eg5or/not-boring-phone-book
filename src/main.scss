@@ -1,0 +1,496 @@
+@import url('https://fonts.googleapis.com/css2?family=Jura:wght@300;400;700&display=swap');
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+
+// == VARIABLES ==
+// colors
+$light-color: #FBF9DE;
+$lighter-color: #8CBAA3;
+$middle-color: #1A5864;
+$accent-color: #C9AF3E;
+$dark-color: #2B3031;
+// adaptive
+$screen-xxs-min: 0px;
+$screen-xs-min: 320px;
+$screen-sm-min: 576px;
+$screen-md-min: 768px;
+$screen-lg-min: 992px;
+$screen-xl-min: 1200px;
+
+$screen-xxs-max: 319px;
+$screen-xs-max: 575px;
+$screen-sm-max: 767px;
+$screen-md-max: 991px;
+$screen-lg-max: 1199px;
+$screen-xl-max: 1399px;
+
+// == COMMON ==
+
+* {
+  box-sizing: border-box;
+  font-family: Jura;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-size: 15px;
+  font-weight: 300;
+  color: $light-color;
+  background-color: $dark-color;
+}
+
+h1 {
+  font-size: 50px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+h2 {
+  font-size: 30px;
+  font-weight: 400;
+  margin-bottom: 20px;
+}
+
+.app-wrapper {
+  margin: 0 auto;
+  padding: 0;
+  display: flex;
+  justify-content: space-around;
+  max-width: 400px;
+  height: 100vh;
+  position: relative;
+  background-color: $dark-color;
+}
+
+
+
+// == BLOCKS ==
+
+
+
+.block {
+  &-main {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    min-width: 320px;
+    flex-basis: 30%;
+    flex-grow: 1;
+
+    .title {
+      h1 {
+        display: inline-block;
+        text-align: center;
+      }
+      span {
+        color: $accent-color;
+      }
+    }
+  }
+}
+
+// == HEADER ==
+
+.header {
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top:0;
+  z-index: 999;
+  background-color: $dark-color;
+}
+
+// == SEARCH ==
+
+.search {
+  &-wrapper {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  &-inner {
+
+  }
+
+  &__input {
+    background-color: transparent;
+    outline: none;
+    border-bottom: 1px solid $light-color;
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    width: 100%;
+    color: $light-color;
+    font-size: 25px;
+    padding: 8px;
+  }
+  &__input:focus {
+    border-bottom: 1px solid $accent-color;
+  }
+
+}
+
+// == LIST ==
+
+.list {
+  &-wrapper {
+    width: 100%;
+  }
+
+  &-inner {
+    width: 100%;
+  }
+
+  &__not {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 50px 10px;
+  }
+
+  &__add-contact {
+    margin-bottom: 20px;
+    &-btn {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    &-btn:hover {
+      cursor: pointer;
+      color: $accent-color;
+
+      .material-icons {
+        color: $accent-color;
+      }
+    }
+    &-form {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+
+      &-item {
+        display: flex;
+        width: 100%;
+      }
+      &-item:not(:last-child) {
+        margin-bottom: 10px;
+      }
+      &-error {
+        color: $accent-color;
+        font-size: 10px;
+        font-weight: 400;
+        text-transform: uppercase;
+        padding: 5px;
+      }
+
+      &-buttons {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        width: 100%;
+        margin-top: 10px;
+
+        &-add,
+        &-cancel {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          padding: 5px 15px;
+          font-size: 16px;
+          line-height: 16px;
+          text-transform: uppercase;
+          font-weight: 700;
+        }
+
+        &-add:hover,
+        &-cancel:hover {
+          cursor: pointer;
+
+        }
+
+        &-add {
+          color: $accent-color;
+        }
+
+        &-cancel {
+          color: $lighter-color;
+        }
+
+        &-add:hover {
+          background-color: $accent-color;
+          color: $light-color;
+        }
+
+        &-cancel:hover {
+          background-color: $lighter-color;
+          color: $dark-color;
+        }
+      }
+    }
+
+    &-input {
+      width: 100%;
+      input {
+        width: 100%;
+        outline: none;
+        background-color: transparent;
+        border-top: none;
+        border-left: none;
+        border-right: none;
+        border-bottom: 1px solid $lighter-color;
+        color: $light-color;
+        padding: 5px;
+        font-size: 16px;
+      }
+    }
+
+    &-icon {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0 10px;
+    }
+    &-text {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-left: 10px;
+      text-transform: uppercase;
+      font-size: 18px;
+      font-weight: 300;
+    }
+  }
+
+}
+
+// == CONTACT ==
+
+.contact-name {
+  &-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 30px;
+    padding: 10px;
+    width: 100%;
+  }
+  &-wrapper:hover {
+    cursor: pointer;
+    background-color: $middle-color;
+  }
+
+  &-open {
+    background-color: $middle-color;
+  }
+
+  &__avatar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .material-icons {
+      font-size: 30px;
+    }
+  }
+
+  &__name {
+    margin-left: 20px;
+    margin-right: 20px;
+    display: flex;
+    justify-content: flex-start;
+    flex-grow: 1;
+    width: 100%;
+    line-height: 30px;
+    align-items: center;
+    white-space: nowrap;
+    border: 1px solid transparent;
+  }
+
+  &__input {
+    margin-left: 20px;
+    margin-right: 20px;
+    input {
+      margin: 0;
+      padding: 0;
+      max-width: 280px;
+      font-size: 30px;
+      line-height: 30px;
+      color: $lighter-color;
+      border-top: none;
+      border-left: none;
+      border-right: none;
+      border-bottom: 1px solid $lighter-color;
+      background-color: transparent;
+      outline: none;
+    }
+
+  }
+
+  &__arrow {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.contact-inform {
+  &-wrapper {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    height:0;
+    transition: height linear .8s;
+  }
+
+  &-open {
+    display: flex;
+    height: auto;
+  }
+
+  &__phone {
+    width: 100%;
+
+    &-wrapper {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      position: relative;
+    }
+    &-text {
+      font-size: 35px;
+      font-weight: 700;
+      color: $lighter-color;
+      cursor: default;
+      border: 1px solid transparent;
+    }
+    &-input {
+      input {
+        margin: 0;
+        max-width: 330px;
+        text-align: center;
+        font-size: 35px;
+        font-weight: 700;
+        line-height: 35px;
+        color: $lighter-color;
+        border-top: none;
+        border-left: none;
+        border-right: none;
+        border-bottom: 1px solid $lighter-color;
+        background-color: transparent;
+        outline: none;
+      }
+    }
+    &-edit-icon {
+      position: absolute;
+      height: 100%;
+      top:0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .material-icons {
+        font-size: 20px;
+      }
+    }
+
+    &-edit-icon:hover {
+      cursor: pointer;
+    }
+
+  }
+
+  &__email {
+    width: 100%;
+
+    &-wrapper {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      position: relative;
+    }
+    &-text {
+      font-size: 25px;
+      font-weight: 300;
+      color: $accent-color;
+      cursor: default;
+    }
+    &-input {
+      input {
+        margin: 0;
+        max-width: 330px;
+        text-align: center;
+        font-size: 25px;
+        font-weight: 300;
+        color: $lighter-color;
+        border-top: none;
+        border-left: none;
+        border-right: none;
+        border-bottom: 1px solid $lighter-color;
+        background-color: transparent;
+        outline: none;
+      }
+    }
+    &-edit-icon {
+      position: absolute;
+      height: 100%;
+      top:0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .material-icons {
+        font-size: 20px;
+      }
+    }
+
+    &-edit-icon:hover {
+      cursor: pointer;
+    }
+
+  }
+  &__buttons {
+    position: relative;
+    width: 100%;
+    height: 20px;
+    margin-top: 10px;
+
+    &-change-name {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-transform: uppercase;
+      font-size: 12px;
+      font-weight: 700;
+      height: 100%;
+
+    }
+    &-change-name:hover {
+      cursor: pointer;
+      color: $accent-color;
+    }
+
+    &-delete-contact {
+      .material-icons {
+        font-size: 20px;
+      }
+      position: absolute;
+      bottom:0;
+      right: 0;
+      height: 100%;
+      padding-right: 10px;
+    }
+    &-delete-contact:hover {
+      .material-icons {
+        color: $accent-color;
+      }
+      cursor: pointer;
+    }
+  }
+
+
+
+}
