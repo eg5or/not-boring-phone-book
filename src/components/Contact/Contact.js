@@ -131,7 +131,7 @@ const Contact = ({
                         </div>
                 }
                 <div className="contact-inform__phone-edit-icon"
-                     onClick={editModePhone ? onEditModePhoneClose : editIconPhoneShow && onEditModePhoneOpen}
+                     onClick={editModePhone ? onEditModePhoneClose : editIconPhoneShow ? onEditModePhoneOpen : undefined}
                 >
                     <span className="material-icons">
                         { editModePhone ? 'done' : editIconPhoneShow && 'edit' }
@@ -158,7 +158,7 @@ const Contact = ({
                             </div>
                     }
                     <div className="contact-inform__email-edit-icon"
-                         onClick={editModeEmail ? onEditModeEmailClose : editIconEmailShow && onEditModeEmailOpen}
+                         onClick={editModeEmail ? onEditModeEmailClose : editIconEmailShow ? onEditModeEmailOpen : undefined}
                     >
                         <span className="material-icons">
                             { editModeEmail ? 'done' : editIconEmailShow &&  'edit' }
