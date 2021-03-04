@@ -1,5 +1,6 @@
 import React, {useState} from 'react'
 import {useFormik} from 'formik';
+import {Transition, CSSTransition} from 'react-transition-group';
 
 const Contact = ({
                      id,
@@ -10,7 +11,7 @@ const Contact = ({
                      updatePhone,
                      updateEmail,
                      deleteContact
-}) => {
+                 }) => {
     // ------------ FORMIK ---------------------------------------
     const formik = useFormik({
         initialValues: {
@@ -78,109 +79,117 @@ const Contact = ({
     // ------------ / FUNCTIONS ------------------------------------
 
     return <div className="contact-wrapper">
-        <div onClick={onOpenInform} className={`contact-name-wrapper ${openInform && 'contact-name-open'}`}>
-            <div className="contact-name__avatar">
+            <div onClick={onOpenInform} className={`contact-name-wrapper ${openInform && 'contact-name-open'}`}>
+                <div className="contact-name__avatar">
                 <span className="material-icons">
                     account_circle
                 </span>
-            </div>
-            {
-                editModeName
-                ? <div className="contact-name__input">
-                        <input id="name"
-                               name="name"
-                               type="text"
-                               value={formik.values.name}
-                               onChange={formik.handleChange}
-                               autoFocus={true}
-                               onKeyDown={onKeyEnter}
-                        />
-                    </div>
-                : <div className="contact-name__name">
-                    {name}
                 </div>
-            }
-            <div className="contact-name__arrow">
-                {openInform
-                    ? <span className="material-icons">
-                        keyboard_arrow_up
-                    </span>
-                    : <span className="material-icons">
-                        keyboard_arrow_down
-                    </span>
-                }
-            </div>
-        </div>
-        <div className={`contact-inform-wrapper ${openInform && 'contact-inform-open'}`}>
-            <div className="contact-inform__phone-wrapper"
-                 onMouseEnter={onEditIconPhoneShow} onMouseLeave={onEditIconPhoneHide}
-            >
                 {
-                    editModePhone
-                        ? <div className="contact-inform__phone-input">
-                            <input id="phone"
-                                   name="phone"
-                                   type="tel"
-                                   value={formik.values.phone}
+                    editModeName
+                        ? <div className="contact-name__input">
+                            <input id="name"
+                                   name="name"
+                                   type="text"
+                                   value={formik.values.name}
                                    onChange={formik.handleChange}
                                    autoFocus={true}
+                                   onKeyDown={onKeyEnter}
                             />
                         </div>
-                        : <div className="contact-inform__phone-text">
-                            {phone}
+                        : <div className="contact-name__name">
+                            {name}
                         </div>
                 }
-                <div className="contact-inform__phone-edit-icon"
-                     onClick={editModePhone ? onEditModePhoneClose : editIconPhoneShow ? onEditModePhoneOpen : undefined}
-                >
-                    <span className="material-icons">
-                        { editModePhone ? 'done' : editIconPhoneShow && 'edit' }
+                <div className="contact-name__arrow">
+                    {openInform
+                        ? <span className="material-icons">
+                        keyboard_arrow_up
                     </span>
-                </div>
-            </div>
-            <div className="contact-inform__email">
-                <div className="contact-inform__email-wrapper"
-                     onMouseEnter={onEditIconEmailShow} onMouseLeave={onEditIconEmailHide}
-                >
-                    {
-                        editModeEmail
-                            ? <div className="contact-inform__email-input">
-                                <input id="email"
-                                       name="email"
-                                       type="text"
-                                       value={formik.values.email}
-                                       onChange={formik.handleChange}
-                                       autoFocus={true}
-                                />
-                            </div>
-                            : <div className="contact-inform__email-text">
-                                {email}
-                            </div>
+                        : <span className="material-icons">
+                        keyboard_arrow_down
+                    </span>
                     }
-                    <div className="contact-inform__email-edit-icon"
-                         onClick={editModeEmail ? onEditModeEmailClose : editIconEmailShow ? onEditModeEmailOpen : undefined}
-                    >
-                        <span className="material-icons">
-                            { editModeEmail ? 'done' : editIconEmailShow &&  'edit' }
-                        </span>
-                    </div>
                 </div>
             </div>
-            <div className="contact-inform__buttons">
-                <div onClick={editModeName ? onEditModeNameClose : onEditModeNameOpen}
-                     className="contact-inform__buttons-change-name"
-                >
-                    {editModeName ? 'сохранить имя' : 'изменить имя'}
-                </div>
-                <div onClick={onDeleteContact} className="contact-inform__buttons-delete-contact">
+            <CSSTransition
+                in={openInform}
+                timeout={300}
+                classNames="contact-inform-wrapper"
+                mountOnEnter
+                unmountOnExit
+            >
+                <div className={`contact-inform-wrapper ${openInform && 'contact-inform-open'}`}>
+                    <div className="contact-inform__phone-wrapper"
+                         onMouseEnter={onEditIconPhoneShow} onMouseLeave={onEditIconPhoneHide}
+                    >
+                        {
+                            editModePhone
+                                ? <div className="contact-inform__phone-input">
+                                    <input id="phone"
+                                           name="phone"
+                                           type="tel"
+                                           value={formik.values.phone}
+                                           onChange={formik.handleChange}
+                                           autoFocus={true}
+                                    />
+                                </div>
+                                : <div className="contact-inform__phone-text">
+                                    {phone}
+                                </div>
+                        }
+                        <div className="contact-inform__phone-edit-icon"
+                             onClick={editModePhone ? onEditModePhoneClose : editIconPhoneShow ? onEditModePhoneOpen : undefined}
+                        >
+                    <span className="material-icons">
+                        {editModePhone ? 'done' : editIconPhoneShow && 'edit'}
+                    </span>
+                        </div>
+                    </div>
+                    <div className="contact-inform__email">
+                        <div className="contact-inform__email-wrapper"
+                             onMouseEnter={onEditIconEmailShow} onMouseLeave={onEditIconEmailHide}
+                        >
+                            {
+                                editModeEmail
+                                    ? <div className="contact-inform__email-input">
+                                        <input id="email"
+                                               name="email"
+                                               type="text"
+                                               value={formik.values.email}
+                                               onChange={formik.handleChange}
+                                               autoFocus={true}
+                                        />
+                                    </div>
+                                    : <div className="contact-inform__email-text">
+                                        {email}
+                                    </div>
+                            }
+                            <div className="contact-inform__email-edit-icon"
+                                 onClick={editModeEmail ? onEditModeEmailClose : editIconEmailShow ? onEditModeEmailOpen : undefined}
+                            >
+                        <span className="material-icons">
+                            {editModeEmail ? 'done' : editIconEmailShow && 'edit'}
+                        </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="contact-inform__buttons">
+                        <div onClick={editModeName ? onEditModeNameClose : onEditModeNameOpen}
+                             className="contact-inform__buttons-change-name"
+                        >
+                            {editModeName ? 'сохранить имя' : 'изменить имя'}
+                        </div>
+                        <div onClick={onDeleteContact} className="contact-inform__buttons-delete-contact">
                     <span className="material-icons">
                         delete
                     </span>
+                        </div>
+                    </div>
                 </div>
-            </div>
-
+            </CSSTransition>
         </div>
-    </div>
+
 }
 
 export default Contact
