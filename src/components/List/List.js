@@ -2,6 +2,8 @@ import React, {useState} from 'react'
 import Contact from '../Contact/Contact';
 import {useFormik} from 'formik';
 import {CSSTransition, TransitionGroup} from 'react-transition-group';
+import * as yup from 'yup';
+import MaskedInput from 'react-text-mask'
 
 const List = ({
                   contacts,
@@ -33,13 +35,20 @@ const List = ({
         />
     </CSSTransition>)
     // ------------ / MAPS ELEMENTS --------------------------------
+    let validationSchema = yup.object().shape({
+        name: yup.string().required('Имя обязательно'),
+        phone: yup.string().required('Телефон обязателен').matches(/(\+7\ \([1-9]\d\d\)\ \d\d\d\-\d\d\-\d\d)/, 'Введите номер полностью'),
+        email: yup.string().email('Некорректный email').required('E-mail обязателен'),
+    });
     // ------------ FORMIK -----------------------------------------
     const formik = useFormik({
         initialValues: {
             name: '',
             phone: '',
             email: '',
-        }
+        },
+        validateOnMount: true,
+        validationSchema: validationSchema,
     });
     // ------------ / FORMIK ---------------------------------------
     // ------------ LOCAL STATE ------------------------------------
@@ -69,12 +78,12 @@ const List = ({
     }
 
     const onAddContact = () => {
-        if (formik.values.name.length < 1) {
-            onErrorShow('Поле Имя должно быть заполнено')
-        } else if (formik.values.phone.length < 1) {
-            onErrorShow('Поле Телефон должно быть заполнено')
-        } else if (formik.values.email.length < 1) {
-            onErrorShow('Поле E-mail должно быть заполнено')
+        if (formik.errors.name) {
+            onErrorShow(formik.errors.name)
+        } else if (formik.errors.phone) {
+            onErrorShow(formik.errors.phone)
+        } else if (formik.errors.email) {
+            onErrorShow(formik.errors.email)
         } else {
             addNewContact(formik.values.name, formik.values.phone, formik.values.email)
             onHideAddContact()
@@ -99,11 +108,11 @@ const List = ({
                 >
                     <div className="list__add-contact-form">
                         <div className="list__add-contact-form-item">
-                            <div className="list__add-contact-icon">
+                            <label htmlFor="name" className="list__add-contact-icon">
                                     <span className="material-icons">
                                         badge
                                     </span>
-                            </div>
+                            </label>
                             <div className="list__add-contact-input">
                                 <input id="name"
                                        name="name"
@@ -116,31 +125,33 @@ const List = ({
                             </div>
                         </div>
                         <div className="list__add-contact-form-item">
-                            <div className="list__add-contact-icon">
+                            <label htmlFor="phone" className="list__add-contact-icon">
                                     <span className="material-icons">
                                         call
                                     </span>
-                            </div>
+                            </label>
                             <div className="list__add-contact-input">
-                                <input id="phone"
-                                       name="phone"
-                                       type="text"
-                                       value={formik.values.phone}
-                                       onChange={formik.handleChange}
-                                       placeholder="Телефон"
+                                <MaskedInput  mask={['+','7',' ','(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/,'-', /\d/, /\d/]}
+                                              showMask={true}
+                                              id="phone"
+                                              name="phone"
+                                              type="text"
+                                              value={formik.values.phone}
+                                              onChange={formik.handleChange}
+
                                 />
                             </div>
                         </div>
                         <div className="list__add-contact-form-item">
-                            <div className="list__add-contact-icon">
+                            <label htmlFor="email" className="list__add-contact-icon">
                                     <span className="material-icons">
                                         mail
                                     </span>
-                            </div>
+                            </label>
                             <div className="list__add-contact-input">
                                 <input id="email"
                                        name="email"
-                                       type="text"
+                                       type="email"
                                        value={formik.values.email}
                                        onChange={formik.handleChange}
                                        placeholder="E-mail"
