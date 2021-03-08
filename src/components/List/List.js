@@ -4,37 +4,17 @@ import {useFormik} from 'formik';
 import {CSSTransition, TransitionGroup} from 'react-transition-group';
 import * as yup from 'yup';
 import MaskedInput from 'react-text-mask'
+import {
+    addNewContact,
+    deleteContact,
+    setErrorMessage,
+    updateEmail,
+    updateName,
+    updatePhone
+} from '../../redux/contactsReducer';
+import {useDispatch} from 'react-redux';
 
-const List = ({
-                  contacts,
-                  updateName,
-                  updatePhone,
-                  updateEmail,
-                  deleteContact,
-                  addNewContact,
-                  setErrorMessage,
-                  errorMessage
-              }) => {
-    // ------------ MAPS ELEMENTS ----------------------------------
-    const contactsElements = contacts.map(item => <CSSTransition
-        key={item.id}
-        timeout={480}
-        classNames="contact-wrapper"
-        mountOnEnter
-        unmountOnExit
-    >
-        <Contact key={item.id}
-                 id={item.id}
-                 name={item.name}
-                 phone={item.phone}
-                 email={item.email}
-                 updateName={updateName}
-                 updatePhone={updatePhone}
-                 updateEmail={updateEmail}
-                 deleteContact={deleteContact}
-        />
-    </CSSTransition>)
-    // ------------ / MAPS ELEMENTS --------------------------------
+const List = ({contacts, errorMessage}) => {
     let validationSchema = yup.object().shape({
         name: yup.string().required('Имя обязательно'),
         phone: yup.string().required('Телефон обязателен').matches(/(\+7\ \([1-9]\d\d\)\ \d\d\d\-\d\d\-\d\d)/, 'Введите номер полностью'),
@@ -56,6 +36,9 @@ const List = ({
     const [showAddContactForm, setShowAddContactForm] = useState(false)
     const [errorShow, setErrorShow] = useState(false)
     // ------------ / LOCAL STATE ----------------------------------
+    // ------------ HOOKS ------------------------------------------
+    const dispatch = useDispatch()
+    // ------------ / HOOKS ----------------------------------------
     // ------------ FUNCTIONS --------------------------------------
     const onShowAddContact = () => {
         setShowAddContactForm(true)
@@ -66,11 +49,11 @@ const List = ({
         formik.values.name = ''
         formik.values.phone = ''
         formik.values.email = ''
-        setErrorMessage(null)
+        dispatch(setErrorMessage(null))
     }
 
     const onErrorShow = (message) => {
-        setErrorMessage(message)
+        dispatch(setErrorMessage(message))
         setErrorShow(true)
         setTimeout(() => {
             setErrorShow(false)
@@ -85,13 +68,33 @@ const List = ({
         } else if (formik.errors.email) {
             onErrorShow(formik.errors.email)
         } else {
-            addNewContact(formik.values.name, formik.values.phone, formik.values.email)
+            dispatch(addNewContact(formik.values.name, formik.values.phone, formik.values.email))
             onHideAddContact()
             setErrorShow(false)
         }
     }
     // ------------ / FUNCTIONS ------------------------------------
-
+    // ------------ MAPS ELEMENTS ----------------------------------
+    const contactsElements = contacts.map(item => <CSSTransition
+        key={item.id}
+        timeout={480}
+        classNames="contact-wrapper"
+        mountOnEnter
+        unmountOnExit
+    >
+        <Contact key={item.id}
+                 id={item.id}
+                 name={item.name}
+                 phone={item.phone}
+                 email={item.email}
+                 updateName={updateName}
+                 updatePhone={updatePhone}
+                 updateEmail={updateEmail}
+                 deleteContact={deleteContact}
+                 dispatch={dispatch}
+        />
+    </CSSTransition>)
+    // ------------ / MAPS ELEMENTS --------------------------------
     return <div className="list-wrapper">
         <div className="list-inner">
             <div className="list__add-contact">

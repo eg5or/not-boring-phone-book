@@ -1,15 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import List from './components/List/List';
-import {compose} from 'redux';
-import {connect} from 'react-redux';
-import {
-    addNewContact,
-    deleteContact,
-    setErrorMessage,
-    updateEmail,
-    updateName,
-    updatePhone
-} from './redux/contactsReducer';
+import {useDispatch, useSelector} from 'react-redux';
 import {useFormik} from 'formik';
 
 function App(props) {
@@ -24,11 +15,9 @@ function App(props) {
     const [searchMode, setSearchMode] = useState(false)
     const [foundContacts, setFoundContacts] = useState([])
     // ------------ / LOCAL STATE ----------------------------------
-    // ------------ FUNCTIONS --------------------------------------
-    const onSearch = (e) => {
-        setFoundContacts(props.contacts.filter(item => new RegExp(e, 'i').test(item.name)))
-    }
-    // ------------ / FUNCTIONS ------------------------------------
+    // ------------ HOOKS ------------------------------------------
+    const {contacts, errorMessage} = useSelector(({contacts}) => contacts)
+
     useEffect(() => {
         if (formik.values.search.length > 0) {
             onSearch(formik.values.search)
@@ -36,8 +25,13 @@ function App(props) {
         } else {
             setSearchMode(false)
         }
-    }, [formik.values.search, props.contacts])
-
+    }, [formik.values.search, contacts])
+    // ------------ / HOOKS ----------------------------------------
+    // ------------ FUNCTIONS --------------------------------------
+    const onSearch = (e) => {
+        setFoundContacts(contacts.filter(item => new RegExp(e, 'i').test(item.name)))
+    }
+    // ------------ / FUNCTIONS ------------------------------------
     return (
         <div className="app-wrapper">
             <div className="block-main">
@@ -58,46 +52,10 @@ function App(props) {
                         </div>
                     </div>
                 </div>
-                {
-                    searchMode
-                    ? <List contacts={foundContacts}
-                            updateName={props.updateName}
-                            updatePhone={props.updatePhone}
-                            updateEmail={props.updateEmail}
-                            deleteContact={props.deleteContact}
-                            addNewContact={props.addNewContact}
-                            setErrorMessage={props.setErrorMessage}
-                            errorMessage={props.errorMessage}
-                        />
-                    : <List contacts={props.contacts}
-                                updateName={props.updateName}
-                                updatePhone={props.updatePhone}
-                                updateEmail={props.updateEmail}
-                                deleteContact={props.deleteContact}
-                                addNewContact={props.addNewContact}
-                                setErrorMessage={props.setErrorMessage}
-                                errorMessage={props.errorMessage}
-                    />
-                }
-
-
+                <List contacts={searchMode ? foundContacts : contacts} errorMessage={errorMessage} />
             </div>
         </div>
     );
 }
 
-const mapStateToProps = (state) => ({
-    contacts: state.contacts.contacts,
-    errorMessage: state.contacts.errorMessage,
-})
-
-export default compose(
-    connect(mapStateToProps, {
-        addNewContact,
-        updateName,
-        updatePhone,
-        updateEmail,
-        deleteContact,
-        setErrorMessage
-    })
-)(App)
+export default App

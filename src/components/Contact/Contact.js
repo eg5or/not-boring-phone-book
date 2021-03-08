@@ -10,7 +10,8 @@ const Contact = ({
                      updateName,
                      updatePhone,
                      updateEmail,
-                     deleteContact
+                     deleteContact,
+                     dispatch
                  }) => {
     // ------------ FORMIK ---------------------------------------
     const formik = useFormik({
@@ -49,7 +50,7 @@ const Contact = ({
         setEditModeName(true)
     }
     const onEditModeNameClose = () => {
-        updateName(id, formik.values.name)
+        dispatch(updateName(id, formik.values.name))
         setEditModeName(false)
     }
     const onKeyEnter = (e) => {
@@ -61,18 +62,18 @@ const Contact = ({
         setEditModePhone(true)
     }
     const onEditModePhoneClose = () => {
-        updatePhone(id, formik.values.phone)
+        dispatch(updatePhone(id, formik.values.phone))
         setEditModePhone(false)
     }
     const onEditModeEmailOpen = () => {
         setEditModeEmail(true)
     }
     const onEditModeEmailClose = () => {
-        updateEmail(id, formik.values.email)
+        dispatch(updateEmail(id, formik.values.email))
         setEditModeEmail(false)
     }
     const onDeleteContact = () => {
-        deleteContact(id)
+        dispatch(deleteContact(id))
     }
 
 
