@@ -1,6 +1,6 @@
-import React, {useState} from 'react'
+import React, {useState, useRef, useEffect} from 'react'
 import {useFormik} from 'formik';
-import {Transition, CSSTransition} from 'react-transition-group';
+import {CSSTransition} from 'react-transition-group';
 
 const Contact = ({
                      id,
@@ -30,7 +30,21 @@ const Contact = ({
     const [editModePhone, setEditModePhone] = useState(false)
     const [editModeEmail, setEditModeEmail] = useState(false)
     // ------------ / LOCAL STATE ----------------------------------
+    // ------------ HOOKS ------------------------------------------
+    const contactWrapper = useRef()
+    useEffect(() => {
+        document.body.addEventListener('click', handleOutsideClick)
+    }, [])
+    // ------------ / HOOKS ----------------------------------------
     // ------------ FUNCTIONS --------------------------------------
+    const handleOutsideClick = (e) => {
+        if (!e.path.includes(contactWrapper.current)) {
+            setOpenInform(false)
+            setEditModeName(false)
+            setEditModePhone(false)
+            setEditModeEmail(false)
+        }
+    }
     const onOpenInform = () => {
         setOpenInform(!openInform)
     }
@@ -46,40 +60,50 @@ const Contact = ({
     const onEditIconEmailHide = () => {
         setEditIconEmailShow(false)
     }
-    const onEditModeNameOpen = () => {
-        setEditModeName(true)
-    }
-    const onEditModeNameClose = () => {
-        dispatch(updateName(id, formik.values.name))
-        setEditModeName(false)
+    const onEditMode = (e) => {
+        switch (e.target.id || e.target.parentNode.id) {
+            case 'name':
+            case 'name-edit-btn':
+                if (editModeName) {
+                    dispatch(updateName(id, formik.values.name))
+                    setEditModeName(false)
+                } else {
+                    setEditModeName(true)
+                }
+                break
+            case 'email':
+            case 'email-edit-btn':
+                if (editModeEmail) {
+                    dispatch(updateEmail(id, formik.values.email))
+                    setEditModeEmail(false)
+                } else {
+                    setEditModeEmail(true)
+                }
+                break
+            case 'phone':
+            case 'phone-edit-btn':
+                if (editModePhone) {
+                    dispatch(updatePhone(id, formik.values.phone))
+                    setEditModePhone(false)
+                } else {
+                    setEditModePhone(true)
+                }
+                break
+            default:
+                break
+        }
     }
     const onKeyEnter = (e) => {
         if (e.code === 'Enter') {
-            onEditModeNameClose()
+            onEditMode(e)
         }
-    }
-    const onEditModePhoneOpen = () => {
-        setEditModePhone(true)
-    }
-    const onEditModePhoneClose = () => {
-        dispatch(updatePhone(id, formik.values.phone))
-        setEditModePhone(false)
-    }
-    const onEditModeEmailOpen = () => {
-        setEditModeEmail(true)
-    }
-    const onEditModeEmailClose = () => {
-        dispatch(updateEmail(id, formik.values.email))
-        setEditModeEmail(false)
     }
     const onDeleteContact = () => {
         dispatch(deleteContact(id))
     }
-
-
     // ------------ / FUNCTIONS ------------------------------------
 
-    return <div className="contact-wrapper">
+    return <div ref={contactWrapper} className="contact-wrapper">
             <div onClick={onOpenInform} className={`contact-name-wrapper ${openInform && 'contact-name-open'}`}>
                 <div className="contact-name__avatar">
                 <span className="material-icons">
@@ -103,14 +127,9 @@ const Contact = ({
                         </div>
                 }
                 <div className="contact-name__arrow">
-                    {openInform
-                        ? <span className="material-icons">
-                        keyboard_arrow_up
+                    <span className="material-icons">
+                        { openInform ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }
                     </span>
-                        : <span className="material-icons">
-                        keyboard_arrow_down
-                    </span>
-                    }
                 </div>
             </div>
             <CSSTransition
@@ -133,14 +152,15 @@ const Contact = ({
                                            value={formik.values.phone}
                                            onChange={formik.handleChange}
                                            autoFocus={true}
+                                           onKeyDown={onKeyEnter}
                                     />
                                 </div>
                                 : <div className="contact-inform__phone-text">
                                     {phone}
                                 </div>
                         }
-                        <div className="contact-inform__phone-edit-icon"
-                             onClick={editModePhone ? onEditModePhoneClose : editIconPhoneShow ? onEditModePhoneOpen : undefined}
+                        <div id="phone-edit-btn" className="contact-inform__phone-edit-icon"
+                             onClick={onEditMode}
                         >
                     <span className="material-icons">
                         {editModePhone ? 'done' : editIconPhoneShow && 'edit'}
@@ -160,14 +180,15 @@ const Contact = ({
                                                value={formik.values.email}
                                                onChange={formik.handleChange}
                                                autoFocus={true}
+                                               onKeyDown={onKeyEnter}
                                         />
                                     </div>
                                     : <div className="contact-inform__email-text">
                                         {email}
                                     </div>
                             }
-                            <div className="contact-inform__email-edit-icon"
-                                 onClick={editModeEmail ? onEditModeEmailClose : editIconEmailShow ? onEditModeEmailOpen : undefined}
+                            <div id="email-edit-btn" className="contact-inform__email-edit-icon"
+                                 onClick={onEditMode}
                             >
                         <span className="material-icons">
                             {editModeEmail ? 'done' : editIconEmailShow && 'edit'}
@@ -176,7 +197,7 @@ const Contact = ({
                         </div>
                     </div>
                     <div className="contact-inform__buttons">
-                        <div onClick={editModeName ? onEditModeNameClose : onEditModeNameOpen}
+                        <div id="name-edit-btn" onClick={onEditMode}
                              className="contact-inform__buttons-change-name"
                         >
                             {editModeName ? 'сохранить имя' : 'изменить имя'}

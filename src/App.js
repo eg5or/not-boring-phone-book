@@ -4,6 +4,10 @@ import {useDispatch, useSelector} from 'react-redux';
 import {useFormik} from 'formik';
 
 function App(props) {
+    // ------------ LOCAL STATE ------------------------------------
+    const [searchMode, setSearchMode] = useState(false)
+    const [foundContacts, setFoundContacts] = useState([])
+    // ------------ / LOCAL STATE ----------------------------------
     // ------------ FORMIK -----------------------------------------
     const formik = useFormik({
         initialValues: {
@@ -11,10 +15,6 @@ function App(props) {
         }
     });
     // ------------ / FORMIK ---------------------------------------
-    // ------------ LOCAL STATE ------------------------------------
-    const [searchMode, setSearchMode] = useState(false)
-    const [foundContacts, setFoundContacts] = useState([])
-    // ------------ / LOCAL STATE ----------------------------------
     // ------------ HOOKS ------------------------------------------
     const {contacts, errorMessage} = useSelector(({contacts}) => contacts)
 
@@ -30,6 +30,9 @@ function App(props) {
     // ------------ FUNCTIONS --------------------------------------
     const onSearch = (e) => {
         setFoundContacts(contacts.filter(item => new RegExp(e, 'i').test(item.name)))
+    }
+    const clearSearch = () => {
+        formik.setFieldValue('search', '')
     }
     // ------------ / FUNCTIONS ------------------------------------
     return (
@@ -50,6 +53,11 @@ function App(props) {
                                    placeholder="Введите имя или фамилию..."
                             />
                         </div>
+                        { formik.values.search.length > 0 && <div onClick={clearSearch} className="search-clear">
+                            <span className="material-icons">
+                                clear
+                            </span>
+                        </div>}
                     </div>
                 </div>
                 <List contacts={searchMode ? foundContacts : contacts} errorMessage={errorMessage} />

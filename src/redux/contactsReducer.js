@@ -64,6 +64,30 @@ let initialState = {
             name: 'Дельфин Плавников',
             phone: '+7 926 345-67-89',
             email: 'dolphinep@mail.ru'
+        },
+        {
+            id: 7,
+            name: 'Крокодил Геннадиевич',
+            phone: '+7 926 345-67-89',
+            email: 'kroko@mail.ru'
+        },
+        {
+            id: 8,
+            name: 'Чебураш Ушастый',
+            phone: '+7 926 345-67-89',
+            email: 'cheba@gmail.com'
+        },
+        {
+            id: 9,
+            name: 'Кот Матросович',
+            phone: '+7 926 345-67-89',
+            email: 'koteiko@rambler.ru'
+        },
+        {
+            id: 10,
+            name: 'Бегемот Африканский',
+            phone: '+7 926 345-67-89',
+            email: 'begemotina@mail.ru'
         }
     ],
     errorMessage: null
